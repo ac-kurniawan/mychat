@@ -8,18 +8,18 @@ import (
 )
 
 type ChatEntity struct {
-	Id             *string `gorm:"primaryKey,default:uuid_generate_v4()"`
-	SessionID      string  `gorm:"index"`
-	MessageType    string
-	Message        string
-	ReplyForChatId sql.NullString
-	CreatedAt      time.Time
-	ReadAt         sql.NullTime
+	Id                  *string `gorm:"primaryKey,default:uuid_generate_v4()"`
+	SessionChatEntityID string  `gorm:"index"`
+	MessageType         string
+	Message             string
+	ReplyForChatId      sql.NullString
+	CreatedAt           time.Time
+	ReadAt              sql.NullTime
 }
 
 func (c *ChatEntity) FromModel(input model.ChatModel) {
 	c.Id = input.Id
-	c.SessionID = input.SessionId
+	c.SessionChatEntityID = input.SessionId
 	c.MessageType = input.MessageType
 	c.Message = input.Message
 	c.CreatedAt = input.CreatedAt
@@ -48,7 +48,7 @@ func (c *ChatEntity) FromModel(input model.ChatModel) {
 func (c *ChatEntity) ToModel() model.ChatModel {
 	return model.ChatModel{
 		Id:             c.Id,
-		SessionId:      c.SessionID,
+		SessionId:      c.SessionChatEntityID,
 		MessageType:    c.MessageType,
 		Message:        c.Message,
 		ReplyForChatId: &c.ReplyForChatId.String,

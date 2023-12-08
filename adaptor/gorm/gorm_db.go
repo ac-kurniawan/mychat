@@ -53,7 +53,9 @@ func (g *GormDB) GetRoomChatByParticipantGroups(ctx context.Context, participant
 	} else {
 		tx.Preload("SessionChats")
 	}
-	tx.Preload("SessionChats.Chats", "ORDER BY created_at DESC LIMIT ?", initialChatNumber)
+	tx.Preload("SessionChats.Chats", func(db *gorm2.DB) *gorm2.DB {
+		return db.Order("created_at ASC").Limit(int(initialChatNumber))
+	})
 
 	result := tx.Find(&roomChats)
 	if result.Error != nil {
@@ -86,13 +88,15 @@ func (g *GormDB) GetRoomChatBySessionId(ctx context.Context, sessionid string, s
 	}
 
 	var roomChat entity.RoomChatEntity
-	txRoomChat := g.Gorm.Where("id = ?", sessionChat.RoomChatID)
+	txRoomChat := g.Gorm.Where("id = ?", sessionChat.RoomChatEntityID)
 	if sessionStatus != nil {
 		txRoomChat.Preload("SessionChats", "session_status = ?", *sessionStatus)
 	} else {
 		txRoomChat.Preload("SessionChats")
 	}
-	txRoomChat.Preload("SessionChats.Chats", "ORDER BY created_at DESC LIMIT ?", initialChatNumber)
+	txRoomChat.Preload("SessionChats.Chats", func(db *gorm2.DB) *gorm2.DB {
+		return db.Order("created_at ASC").Limit(int(initialChatNumber))
+	})
 	resultRoomChat := txRoomChat.WithContext(ctx).Find(&roomChat)
 	if resultRoomChat.Error != nil {
 		g.Trace.TraceError(span, result.Error)

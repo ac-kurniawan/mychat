@@ -8,17 +8,17 @@ import (
 )
 
 type SessionChatEntity struct {
-	Id         *string `gorm:"primaryKey,default:uuid_generate_v4()"`
-	RoomChatID string  `gorm:"index"`
-	Status     string
-	CreatedAt  time.Time
-	EndedAt    sql.NullTime
-	Chats      []ChatEntity
+	Id               *string `gorm:"primaryKey,default:uuid_generate_v4()"`
+	RoomChatEntityID string  `gorm:"index"`
+	Status           string
+	CreatedAt        time.Time
+	EndedAt          sql.NullTime
+	Chats            []ChatEntity
 }
 
 func (s *SessionChatEntity) FromModel(input model.ChatSessionModel) {
 	s.Id = input.Id
-	s.RoomChatID = input.RoomChatId
+	s.RoomChatEntityID = input.RoomChatId
 	s.Status = input.Status
 	s.CreatedAt = input.CreatedAt
 	if input.EndedAt != nil {
@@ -42,7 +42,7 @@ func (s *SessionChatEntity) ToModel() model.ChatSessionModel {
 	}
 	return model.ChatSessionModel{
 		Id:         s.Id,
-		RoomChatId: s.RoomChatID,
+		RoomChatId: s.RoomChatEntityID,
 		Status:     s.Status,
 		CreatedAt:  s.CreatedAt,
 		EndedAt:    &s.EndedAt.Time,
