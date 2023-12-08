@@ -1,0 +1,4 @@
+env: local
+appName: Mychat
+httpServer:
+  port: 8080
