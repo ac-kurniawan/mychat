@@ -1,0 +1,92 @@
+definitions:
+  dto.ChatDto:
+    properties:
+      createdAt:
+        type: string
+      id:
+        type: string
+      message:
+        type: string
+      messageType:
+        type: string
+      readAt:
+        type: string
+      replyforChatId:
+        type: string
+      sessionId:
+        type: string
+    type: object
+  dto.RoomChatDto:
+    properties:
+      createdAt:
+        type: string
+      id:
+        type: string
+      participantGroup:
+        type: string
+      sessionChats:
+        items:
+          $ref: '#/definitions/dto.SessionChatDto'
+        type: array
+    type: object
+  dto.SessionChatDto:
+    properties:
+      chats:
+        items:
+          $ref: '#/definitions/dto.ChatDto'
+        type: array
+      createdAt:
+        type: string
+      endedAt:
+        type: string
+      id:
+        type: string
+      roomChatId:
+        type: string
+      status:
+        type: string
+    type: object
+  http.HttpErrorModel:
+    properties:
+      code: {}
+      httpStatus:
+        type: integer
+      message:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /room_chat:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: session id
+        in: query
+        name: session_id
+        required: true
+        type: string
+      - description: filter session status
+        in: query
+        name: session_status
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.RoomChatDto'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/http.HttpErrorModel'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.HttpErrorModel'
+      summary: get room chat by session ID
+      tags:
+      - roomChat
+swagger: "2.0"

@@ -1,7 +1,6 @@
 package entity
 
 import (
-	"database/sql"
 	"time"
 
 	"github.com/ac-kurniawan/mychat/core/model"
@@ -12,7 +11,7 @@ type SessionChatEntity struct {
 	RoomChatEntityID string  `gorm:"index"`
 	Status           string
 	CreatedAt        time.Time
-	EndedAt          sql.NullTime
+	EndedAt          *time.Time
 	Chats            []ChatEntity
 }
 
@@ -21,16 +20,7 @@ func (s *SessionChatEntity) FromModel(input model.ChatSessionModel) {
 	s.RoomChatEntityID = input.RoomChatId
 	s.Status = input.Status
 	s.CreatedAt = input.CreatedAt
-	if input.EndedAt != nil {
-		s.EndedAt = sql.NullTime{
-			Valid: false,
-		}
-	} else {
-		s.EndedAt = sql.NullTime{
-			Valid: true,
-			Time:  *input.EndedAt,
-		}
-	}
+	s.EndedAt = input.EndedAt
 }
 
 func (s *SessionChatEntity) ToModel() model.ChatSessionModel {
@@ -45,7 +35,7 @@ func (s *SessionChatEntity) ToModel() model.ChatSessionModel {
 		RoomChatId: s.RoomChatEntityID,
 		Status:     s.Status,
 		CreatedAt:  s.CreatedAt,
-		EndedAt:    &s.EndedAt.Time,
+		EndedAt:    s.EndedAt,
 		Chats:      chats,
 	}
 }

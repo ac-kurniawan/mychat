@@ -14,7 +14,7 @@ type ChatEntity struct {
 	Message             string
 	ReplyForChatId      sql.NullString
 	CreatedAt           time.Time
-	ReadAt              sql.NullTime
+	ReadAt              *time.Time
 }
 
 func (c *ChatEntity) FromModel(input model.ChatModel) {
@@ -23,6 +23,7 @@ func (c *ChatEntity) FromModel(input model.ChatModel) {
 	c.MessageType = input.MessageType
 	c.Message = input.Message
 	c.CreatedAt = input.CreatedAt
+	c.ReadAt = input.ReadAt
 	if input.ReplyForChatId != nil {
 		c.ReplyForChatId = sql.NullString{
 			Valid: false,
@@ -31,16 +32,6 @@ func (c *ChatEntity) FromModel(input model.ChatModel) {
 		c.ReplyForChatId = sql.NullString{
 			Valid:  true,
 			String: *input.ReplyForChatId,
-		}
-	}
-	if input.ReadAt != nil {
-		c.ReadAt = sql.NullTime{
-			Valid: false,
-		}
-	} else {
-		c.ReadAt = sql.NullTime{
-			Valid: true,
-			Time:  *input.ReadAt,
 		}
 	}
 }
@@ -53,6 +44,6 @@ func (c *ChatEntity) ToModel() model.ChatModel {
 		Message:        c.Message,
 		ReplyForChatId: &c.ReplyForChatId.String,
 		CreatedAt:      c.CreatedAt,
-		ReadAt:         &c.ReadAt.Time,
+		ReadAt:         c.ReadAt,
 	}
 }

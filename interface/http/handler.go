@@ -14,6 +14,17 @@ type HttpHandler struct {
 	Trace   library.AppTrace
 }
 
+// GetRoomChatBySessionId
+// @Summary	get room chat by session ID
+// @Tags	roomChat
+// @Accept		json
+// @Produce	json
+// @Param		session_id	query		string	true	"session id"
+// @Param		session_status	query		string	false	"filter session status"
+// @Success	200		{object}	dto.RoomChatDto
+// @Failure 500 {object} HttpErrorModel
+// @Failure 400 {object} HttpErrorModel
+// @Router		/room_chat [get]
 func (h HttpHandler) GetRoomChatBySessionId(c echo.Context) error {
 	ctx, span := h.Trace.StartTraceServer(c.Request().Context(), "HTTP SERVER - GetRoomChatBySessionId")
 	defer h.Trace.EndTrace(span)
@@ -33,5 +44,8 @@ func (h HttpHandler) GetRoomChatBySessionId(c echo.Context) error {
 		return c.JSON(errMsg.HttpStatus, errMsg)
 	}
 
-	return c.JSON(200, result)
+	var response dto.RoomChatDto
+	response.FromModel(*result)
+
+	return c.JSON(200, response)
 }
