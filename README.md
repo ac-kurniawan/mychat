@@ -20,8 +20,8 @@ appName: Mychat
 httpServer:
   port: 8080
 sqlite:
-  runMigration: true
-  filePath: ./test.db # SQLite file path
+  runMigration: true # if this value is true the ORM tools will create the table and fill the created table with data seed
+  filePath: test.db # SQLite file path
 trace:
   enable: true
   hostExporter: https://example.com:4317 # this is required if trace.enable = true
