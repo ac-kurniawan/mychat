@@ -2,3 +2,10 @@ env: local
 appName: Mychat
 httpServer:
   port: 8080
+trace:
+  enable: false
+  hostExporter: https://example.com:4317 # this is required if trace.enable = true
+  apiKey: 123asd123asd # this is required if trace.enable = true
+sqlite:
+  runMigration: false
+  filePath: test.db # SQLite file path

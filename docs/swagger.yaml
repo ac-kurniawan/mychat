@@ -13,6 +13,8 @@ definitions:
         type: string
       replyforChatId:
         type: string
+      senderId:
+        type: string
       sessionId:
         type: string
     type: object
@@ -87,6 +89,40 @@ paths:
           schema:
             $ref: '#/definitions/http.HttpErrorModel'
       summary: get room chat by session ID
+      tags:
+      - roomChat
+  /room_chats:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: participant id
+        in: query
+        name: participant
+        required: true
+        type: string
+      - description: filter session status
+        in: query
+        name: session_status
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.RoomChatDto'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/http.HttpErrorModel'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.HttpErrorModel'
+      summary: get room chat list by participant ID
       tags:
       - roomChat
 swagger: "2.0"

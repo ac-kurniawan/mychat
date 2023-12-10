@@ -33,3 +33,4 @@ trace:
 1. fill the configuration in `properties.yml`
 2. generate all of necesarry file using `make generate`
 3. run command `go run main`
+4. After the apps run properly you can test the REST API using swagger UI in http://localhost:8080/swagger/index.html

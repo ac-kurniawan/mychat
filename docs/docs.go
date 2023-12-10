@@ -63,6 +63,58 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/room_chats": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "roomChat"
+                ],
+                "summary": "get room chat list by participant ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "participant id",
+                        "name": "participant",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "filter session status",
+                        "name": "session_status",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/dto.RoomChatDto"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/http.HttpErrorModel"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/http.HttpErrorModel"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -85,6 +137,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "replyforChatId": {
+                    "type": "string"
+                },
+                "senderId": {
                     "type": "string"
                 },
                 "sessionId": {

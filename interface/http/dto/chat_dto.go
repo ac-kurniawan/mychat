@@ -11,6 +11,7 @@ type ChatDto struct {
 	SessionId      string     `json:"sessionId"`
 	MessageType    string     `json:"messageType"`
 	Message        string     `json:"message"`
+	SenderId       string     `json:"senderId"`
 	ReplyForChatId *string    `json:"replyforChatId"`
 	CreatedAt      time.Time  `json:"createdAt"`
 	ReadAt         *time.Time `json:"readAt"`
@@ -24,6 +25,7 @@ func (c *ChatDto) FromModel(input model.ChatModel) {
 	c.CreatedAt = input.CreatedAt
 	c.ReplyForChatId = input.ReplyForChatId
 	c.ReadAt = input.ReadAt
+	c.SenderId = input.SenderId
 }
 
 func (c *ChatDto) ToModel() model.ChatModel {
@@ -35,5 +37,6 @@ func (c *ChatDto) ToModel() model.ChatModel {
 		ReplyForChatId: c.ReplyForChatId,
 		CreatedAt:      c.CreatedAt,
 		ReadAt:         c.ReadAt,
+		SenderId:       c.SenderId,
 	}
 }

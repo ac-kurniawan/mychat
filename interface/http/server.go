@@ -45,6 +45,7 @@ func (h *HttpServer) registerEndpoint() {
 	h.e.GET("/swagger/*", echoSwagger.WrapHandler)
 
 	h.e.GET("/room_chat", h.handler.GetRoomChatBySessionId)
+	h.e.GET("/room_chats", h.handler.GetRoomChatsByParticipantId)
 }
 
 func (h *HttpServer) Start() {

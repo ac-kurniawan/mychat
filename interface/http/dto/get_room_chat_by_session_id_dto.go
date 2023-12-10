@@ -1,6 +1,6 @@
 package dto
 
-type GetRoomChatBySessionIdDto struct {
-	SessionId     string  `query:"session_id"`
+type GetRoomChatByParticipantIdDto struct {
+	Participant   string  `query:"participant"`
 	SessionStatus *string `query:"session_status"`
 }

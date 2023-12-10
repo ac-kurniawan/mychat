@@ -4,6 +4,7 @@ import "time"
 
 type ChatModel struct {
 	Id             *string
+	SenderId       string
 	SessionId      string
 	MessageType    string
 	Message        string

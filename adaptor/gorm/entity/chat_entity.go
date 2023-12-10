@@ -1,7 +1,6 @@
 package entity
 
 import (
-	"database/sql"
 	"time"
 
 	"github.com/ac-kurniawan/mychat/core/model"
@@ -12,7 +11,8 @@ type ChatEntity struct {
 	SessionChatEntityID string  `gorm:"index"`
 	MessageType         string
 	Message             string
-	ReplyForChatId      sql.NullString
+	SenderId            string
+	ReplyForChatId      *string
 	CreatedAt           time.Time
 	ReadAt              *time.Time
 }
@@ -24,16 +24,8 @@ func (c *ChatEntity) FromModel(input model.ChatModel) {
 	c.Message = input.Message
 	c.CreatedAt = input.CreatedAt
 	c.ReadAt = input.ReadAt
-	if input.ReplyForChatId != nil {
-		c.ReplyForChatId = sql.NullString{
-			Valid: false,
-		}
-	} else {
-		c.ReplyForChatId = sql.NullString{
-			Valid:  true,
-			String: *input.ReplyForChatId,
-		}
-	}
+	c.SenderId = input.SenderId
+	c.ReplyForChatId = input.ReplyForChatId
 }
 
 func (c *ChatEntity) ToModel() model.ChatModel {
@@ -42,7 +34,8 @@ func (c *ChatEntity) ToModel() model.ChatModel {
 		SessionId:      c.SessionChatEntityID,
 		MessageType:    c.MessageType,
 		Message:        c.Message,
-		ReplyForChatId: &c.ReplyForChatId.String,
+		SenderId:       c.SenderId,
+		ReplyForChatId: c.ReplyForChatId,
 		CreatedAt:      c.CreatedAt,
 		ReadAt:         c.ReadAt,
 	}

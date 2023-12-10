@@ -8,7 +8,7 @@ import (
 
 type RoomChatEntity struct {
 	Id               *string `gorm:"primaryKey,default:uuid_generate_v4()"`
-	ParticipantGroup string  `gorm:"index"`
+	ParticipantGroup string  `gorm:"uniqueIndex"`
 	CreatedAt        time.Time
 	SessionChats     []SessionChatEntity
 }

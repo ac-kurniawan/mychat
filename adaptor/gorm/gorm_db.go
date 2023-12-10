@@ -21,7 +21,7 @@ func (g *GormDB) GetParticipantGroupsByParticipant(ctx context.Context, particip
 	defer g.Trace.EndTrace(span)
 
 	var participantGroups []entity.ParticipantGroupEntity
-	result := g.Gorm.WithContext(ctx).Where("id = ?", participant).Find(&participantGroups)
+	result := g.Gorm.WithContext(ctx).Where("participant = ?", participant).Find(&participantGroups)
 	if result.Error != nil {
 		g.Trace.TraceError(span, result.Error)
 		return nil, result.Error
@@ -111,6 +111,8 @@ func (g *GormDB) GetRoomChatBySessionId(ctx context.Context, sessionid string, s
 func NewGormDB(module GormDB, enableAutoMigration bool) core.IChatDB {
 	if enableAutoMigration {
 		module.Gorm.AutoMigrate(&entity.ParticipantGroupEntity{}, &entity.RoomChatEntity{}, &entity.SessionChatEntity{}, &entity.ChatEntity{})
+		CreateParticipantGrop(module.Gorm)
+		CreateRoomChatRecords(module.Gorm)
 	}
 	return &module
 }

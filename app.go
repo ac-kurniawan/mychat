@@ -20,20 +20,29 @@ type MychatApp struct {
 	HttpServer struct {
 		Port string `mapstructure:"port"`
 	} `mapstructure:"httpServer"`
+	Trace struct {
+		Enable       bool   `mapstructure:"enable"`
+		HostExporter string `mapstructure:"hostExporter"`
+		ApiKey       string `mapstructure:"apiKey"`
+	} `mapstructure:"trace"`
+	SQLite struct {
+		RunMigration bool   `mapstructure:"runMigration"`
+		FilePath     string `mapstructure:"filePath"`
+	} `mapstructure:"sqlite"`
 }
 
 func (t MychatApp) Init() {
-	trace := library.NewAppTrace(context.Background(), false, "", "", "", "", "")
+	trace := library.NewAppTrace(context.Background(), t.Trace.Enable, t.Trace.HostExporter, t.Trace.ApiKey, t.AppName, "", t.Env)
 	log := library.NewAppLog(false)
 	utilCore := util.NewUtil(util.Util{
 		AppTrace: trace,
 		AppLog:   log,
 	})
-	sqlite := library.NewGormSqliteConnection("test.db")
+	sqlite := library.NewGormSqliteConnection(t.SQLite.FilePath)
 	DB := gorm.NewGormDB(gorm.GormDB{
 		Gorm:  sqlite,
 		Trace: trace,
-	}, true)
+	}, t.SQLite.RunMigration)
 	repository := repository.NewRepository(repository.Repository{
 		IChatDB: DB,
 	})
